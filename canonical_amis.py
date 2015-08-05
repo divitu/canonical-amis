@@ -7,8 +7,6 @@ import sys
 
 import boto.ec2
 
-from pkg_version import get_version
-
 UBUNTU_OWNER = '099720109477'
 
 ALL_REGIONS = [region.name for region in boto.ec2.regions()]

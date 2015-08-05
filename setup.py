@@ -5,7 +5,21 @@ Find AWS EC2 AMIs for Canonical Ubuntu images
 
 from setuptools import setup
 
-from pkg_version import get_version
+def get_version():
+    VERSION = (     # SEMANTIC
+        0,          # major
+        1,          # minor
+        0,          # patch
+        'beta.1',   # pre-release
+        None        # build metadata
+    )
+
+    version = "%i.%i.%i" % (VERSION[0], VERSION[1], VERSION[2])
+    if VERSION[3]:
+        version += "-%s" % VERSION[3]
+    if VERSION[4]:
+        version += "+%s" % VERSION[4]
+    return version
 
 doc = __doc__.strip("\n")
 
