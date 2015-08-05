@@ -1,0 +1,3 @@
+#!/usr/bin/env python
+import runpy
+runpy.run_module('canonical_amis', run_name=__name__)
