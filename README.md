@@ -24,6 +24,4 @@ AMIs provided by Canonical.
 Install
 -------
 
-    git clone git@github.com:divitu/canonical-amis.git
-    cd canonical-amis
-    sudo ./setup.py install
+    pip install --pre canonical-amis
