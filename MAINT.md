@@ -13,11 +13,3 @@ Test
 ----
 
     ./setup.py test
-
-
-Distribute
-----------
-
-    pip install twine
-    ./setup.py sdist
-    twine upload dist/*
