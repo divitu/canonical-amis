@@ -10,7 +10,7 @@ def get_version():
         0,          # major
         1,          # minor
         0,          # patch
-        'beta.2',   # pre-release
+        'beta.3',   # pre-release
         None        # build metadata
     )
 
