@@ -1,6 +1,5 @@
 Canonical AMIs
 ==============
-[![Build Status](https://travis-ci.org/divitu/canonical-amis.png?branch=master)](https://travis-ci.org/divitu/canonical-amis)
 
 Find AWS EC2 AMIs for Canonical Ubuntu images.
 
@@ -28,8 +27,3 @@ Install
     git clone git@github.com:divitu/canonical-amis.git
     cd canonical-amis
     sudo ./setup.py install
-
-Testing
--------
-
-    python setup.py test
