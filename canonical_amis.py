@@ -12,15 +12,21 @@ UBUNTU_OWNER = '099720109477'
 ALL_REGIONS = [region.name for region in boto.ec2.regions()]
 
 DEFAULT_FILE_TEMPLATE = "canonical-amis_{}.json"
+DEFAULT_MULTI_REGION_FILE = "canonical-amis.json"
 DEFAULT_FILE_MESSAGE = DEFAULT_FILE_TEMPLATE.format('REGION')
 
-def main(region=None, output=None, owner=None):
+def main(regions=None, output=None, owner=None):
+    if regions is None:
+        regions = [None]
     if output is None:
         output = sys.stdout
-    images = json.dumps(get_amis(region, owner), ensure_ascii=False,
-                        sort_keys=True, indent=4, separators=(',', ': '))
+    images = []
+    for region in regions:
+        images += get_amis(region, owner)
+    json_images = json.dumps(images, ensure_ascii=False, sort_keys=True,
+                             indent=4, separators=(',', ': ')) + "\n"
     try:
-        output.write(images + "\n")
+        output.write(json_images)
     except IOError:
         pass
 
@@ -103,16 +109,34 @@ def adjust_ami(image):
 def parse_args(args=None):
     import argparse
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("region", choices=sorted(ALL_REGIONS), nargs='?',
-                        default='us-east-1',
-                        help="The region that should be queried for AMIs")
-    parser.add_argument("output", type=argparse.FileType('w'), nargs='?',
+    regions_group = parser.add_mutually_exclusive_group()
+    regions_group.add_argument("region", choices=sorted(ALL_REGIONS), nargs='?',
+                               help="The region that should be queried for AMIs")
+    regions_group.add_argument("--all", action='store_true',
+                               help="Query all regions")
+    regions_group.add_argument("-m", "--most", action='store_true',
+                               help="Query all regions except cn-* and us-gov-*")
+    parser.add_argument("-o", "--output", type=argparse.FileType('w'), nargs=1,
                         help="The file to output to (defaults to {}; use - for stdout)".format(DEFAULT_FILE_MESSAGE))
-    parser.add_argument("-o", "--owner", default=UBUNTU_OWNER,
+    parser.add_argument("--owner", default=UBUNTU_OWNER,
                         help=argparse.SUPPRESS)
     args = parser.parse_args(args)
+    if args.region:
+        regions = [args.region]
+    elif args.all:
+        regions = sorted(ALL_REGIONS)
+    elif args.most:
+        regions = sorted(set(ALL_REGIONS) - set(['us-gov-west-1', 'cn-north-1']))
+    else:
+        regions = ['us-east-1']
+    setattr(args, 'regions', regions)
+    for attr in 'region', 'all', 'most':
+        delattr(args, attr)
     if args.output is None:
-        args.output = argparse.FileType('w')(DEFAULT_FILE_TEMPLATE.format(args.region))
+        if len(args.regions) > 1:
+            args.output = argparse.FileType('w')(DEFAULT_MULTI_REGION_FILE)
+        else:
+            args.output = argparse.FileType('w')(DEFAULT_FILE_TEMPLATE.format(args.regions[0]))
     return args
 
 if __name__ == '__main__':
