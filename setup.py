@@ -5,7 +5,7 @@ Find AWS EC2 AMIs for Canonical Ubuntu images
 
 from setuptools import setup
 
-from canonical_amis import get_version
+from pkg_version import get_version
 
 doc = __doc__.strip("\n")
 
