@@ -25,3 +25,23 @@ Install
 -------
 
     pip install --pre canonical-amis
+
+Usage
+-----
+
+We recommend using the `canonical-amis` CLI to cache the current set of
+available AMIs.  Then [jq](https://stedolan.github.io/jq/) can be used to query
+that information and provide AMI IDs for your current needs.  E.g.:
+
+    $ jq -r '
+    >     .images[] |
+    >     select(
+    >         .architecture == "x86_64" and
+    >         .ubuntu.version == "12.04" and
+    >         .ebs == "standard" and
+    >         .hvm == false and
+    >         .region == "us-east-1"
+    >     ) |
+    >     .id
+    > ' canonical-amis.json
+    ami-ef6cdc84
