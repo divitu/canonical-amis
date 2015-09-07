@@ -1,7 +1,7 @@
 Canonical AMIs
 ==============
 
-Find AWS EC2 AMIs for Canonical Ubuntu images.
+Find AWS EC2 AMIs for Canonical Ubuntu images.  The code in this repository powers [this AMI database](http://dwca1tqii52iv.cloudfront.net/canonical-amis.json).
 
 Overview
 --------
