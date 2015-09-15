@@ -45,3 +45,19 @@ that information and provide AMI IDs for your current needs.  E.g.:
     >     .id
     > ' canonical-amis.json
     ami-ef6cdc84
+
+You can also use the cached copy on our CDN:
+
+    $ curl -sS edge.divitu.com/canonical-amis.json |
+    > jq -r '
+    >     .images[] |
+    >     select(
+    >         .architecture == "x86_64" and
+    >         .ubuntu.version == "12.04" and
+    >         .ebs == "standard" and
+    >         .hvm == false and
+    >         .region == "us-east-1"
+    >     ) |
+    >     .id
+    > '
+    ami-ef6cdc84
